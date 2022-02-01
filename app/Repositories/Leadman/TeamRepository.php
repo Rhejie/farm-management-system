@@ -3,6 +3,7 @@
 namespace App\Repositories\Leadman;
 
 use App\Models\Leadman\Team;
+use App\Models\Leadman\TeamMember;
 use App\Repositories\Repository;
 use Carbon\Carbon;
 
@@ -16,7 +17,9 @@ class TeamRepository extends Repository {
 
     public function getTeams($params) {
 
-        $teams =  $this->model();
+        $teams =  $this->model()->with(['members' => function ($query) {
+            $query->with(['employee']);
+        }]);
 
         if($params->search) {
 
@@ -39,11 +42,19 @@ class TeamRepository extends Repository {
         $data = new $this->model();
         $data->name = $request->name;
         $data->description = $request->description;
-        $data->employees = $request->employees;
 
         if($data->save()) {
 
-            return $data;
+            foreach($request->employees as $employee) {
+                $member = new TeamMember();
+                $member->team_id = $data->id;
+                $member->employee_id = $employee->id;
+                $member->save();
+            }
+
+            return $this->model()->with(['members' => function ($query) {
+                $query->with(['employee']);
+            }])->find($data->id);
 
         }
 
@@ -54,7 +65,6 @@ class TeamRepository extends Repository {
         $data = $this->model()->find($id);
         $data->name = $request->name;
         $data->description = $request->description;
-        $data->employees = $request->employees;
 
         if($data->save()) {
 

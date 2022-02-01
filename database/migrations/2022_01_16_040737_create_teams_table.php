@@ -17,7 +17,6 @@ class CreateTeamsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->json('employees');
             $table->timestamps();
         });
     }

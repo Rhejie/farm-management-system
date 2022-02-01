@@ -34,16 +34,16 @@
                     </el-table-column>
 
                     <el-table-column
-                        prop="employees"
+                        prop="members"
                         label="MEMBERS"
                         :sortable="true">
                             <template slot-scope="scope">
                                 <el-tag
                                     style="margin-right: 5px; margin-bottom: 5px"
-                                    v-for="member in scope.row.employees"
+                                    v-for="member in scope.row.members"
                                     :key="member.id"
                                     effect="plain">
-                                    {{ member.lastname }}, {{ member.firstname }} {{ member.middlename}}
+                                    {{ member.employee.lastname }}, {{ member.employee.firstname }} {{ member.employee.middlename}}
                                 </el-tag>
                             </template>
                     </el-table-column>

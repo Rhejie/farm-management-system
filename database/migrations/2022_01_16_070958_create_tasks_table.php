@@ -17,6 +17,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->float('daily_rate', 20, 2);
             $table->timestamps();
         });
     }

@@ -37,6 +37,7 @@ class TaskRepository extends Repository {
         $data = new $this->model();
         $data->name = $request->name;
         $data->description = $request->description;
+        $data->daily_rate = $request->daily_rate;
         if($data->save()) {
             return $data;
         }
@@ -48,6 +49,7 @@ class TaskRepository extends Repository {
         $data = $this->model()->find($id);
         $data->name = $request->name;
         $data->description = $request->description;
+        $data->daily_rate = $request->daily_rate;
         if($data->save()) {
             return $data;
         }

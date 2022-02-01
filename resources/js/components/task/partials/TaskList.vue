@@ -27,6 +27,11 @@
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
+                        prop="daily_rate"
+                        label="Rate per Day"
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
                         prop="description"
                         label="DESCRIPTION"
                         show-overflow-tooltip

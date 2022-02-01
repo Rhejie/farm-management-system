@@ -9,7 +9,8 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'employees' => 'array'
-    ];
+    public function members() {
+        return $this->hasMany(TeamMember::class, 'team_id', 'id');
+    }
+
 }

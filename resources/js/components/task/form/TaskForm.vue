@@ -12,6 +12,11 @@
                 </el-form-item>
             </div>
             <div class="col-md-12">
+                <el-form-item label="Rate per day" prop="daily_rate">
+                    <el-input v-model="form.daily_rate" type="number" placeholder="Rate per day"></el-input>
+                </el-form-item>
+            </div>
+            <div class="col-md-12">
                 <el-form-item style="float:right">
                     <el-button type="primary" @click="submitForm('form')">Submit</el-button>
                     <el-button @click="resetForm('form')">Reset</el-button>
@@ -32,10 +37,14 @@ export default {
             form: {
                 name: '',
                 description: '',
+                daily_rate: '',
             },
             rules : {
                 name: [
                     { required: true, message: 'Please input category name', trigger: 'blur' }
+                ],
+                daily_rate: [
+                    { required: true, message: 'Please input rate per day', trigger: 'blur' }
                 ],
                 description: [
                     { required: true, message: 'Please input category name', trigger: 'blur' }
@@ -51,6 +60,7 @@ export default {
         if(this.model && this.model.id) {
             this.form = {
                 name: this.model.name,
+                daily_rate: this.model.daily_rate,
                 description: this.model.description,
             }
         }
@@ -108,6 +118,7 @@ export default {
                 this.form = {
                     id: newVal.id,
                     name: newVal.name,
+                    daily_rate: newVal.daily_rate,
                     description: newVal.description,
                 }
             }
