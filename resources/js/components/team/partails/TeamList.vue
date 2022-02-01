@@ -93,12 +93,15 @@ export default {
         }
     },
     created() {
+
         this.getTeams()
 
         this.$EventDispatcher.listen('NEW_DATA', data => {
+
             this.teams.unshift(data)
             this.dialogTableVisible = false
             this.mode = ''
+
         })
 
         this.$EventDispatcher.listen('UPDATE_DATA', data => {
