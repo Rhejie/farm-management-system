@@ -136,7 +136,9 @@ class DailyOperationRepository extends Repository {
             }
 
             return $this->model()->with(['dailyOperationTeam' => function($query) {
-                $query->with(['dailyOperationTeamMember']);
+                $query->with(['dailyOperationTeamMember' => function($query) {
+                    $query->with(['employee']);
+                }]);
             }, 'area', 'task'])->find($data->id);
 
         }
@@ -166,7 +168,10 @@ class DailyOperationRepository extends Repository {
     public function deleteOperation($id) {
 
         $data = $this->model()->find($id);
-        $data->save();
+        $team = DailyOperationTeam::where('daily_operation_id', $id)->first();
+        DailyOperationTeamMember::where('d_o_team_id', $team->id)->delete();
+        DailyOperationTeam::where('daily_operation_id', $id)->delete();
+        $data->delete();
 
     }
 

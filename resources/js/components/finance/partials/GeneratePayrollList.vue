@@ -211,6 +211,7 @@ export default {
             this.rate_ot = 0
             this.payroll = data.attendance
             this.employee = data.employee
+            this.deductions = data.deductions
             this.loading = false
 
         });

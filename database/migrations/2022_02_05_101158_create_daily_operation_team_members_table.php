@@ -15,7 +15,7 @@ class CreateDailyOperationTeamMembersTable extends Migration
     {
         Schema::create('daily_operation_team_members', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('d_o_team_id');
+            $table->foreignId('d_o_team_id')->constrained('daily_operation_teams')->onDelete('cascade');
             $table->unsignedBigInteger('employee_id');
             $table->timestamps();
         });

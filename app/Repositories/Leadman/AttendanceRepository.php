@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Leadman;
 
+use App\Models\HR\Employee;
 use App\Models\Leadman\Attendance;
 use App\Models\Leadman\DailyOperation;
 use App\Repositories\Repository;
@@ -224,6 +225,10 @@ class AttendanceRepository extends Repository {
                     $att->rate = $dailyOperations->task->daily_rate;
                     $att->task = $dailyOperations->task->name;
                }
+               else {
+                    $att->rate = 0;
+                    $att->task = '';
+               }
 
             array_push($daily, $dailyOperations);
         }
@@ -263,10 +268,63 @@ class AttendanceRepository extends Repository {
             return $data;
         });
 
+        $employee = Employee::find($request->employee_id);
+
+        $deductions = [];
+
+        if($employee) {
+            if($employee->philhealth) {
+
+                $total_salary = 0;
+
+                foreach($attendance as $att) {
+                    $hours = null;
+                    if($att->diff_in_hours > 9) {
+                        $hours = 9;
+                    }
+                    else {
+                        $hours = $att->diff_in_hours;
+                    }
+
+                    $per_day = $att->rate * ($hours / 9);
+
+                    $total_salary += $per_day;
+                }
+
+                $total_ph_dec = $total_salary * 0.03;
+
+                array_push($deductions, ['type' => 'PhilHealth', 'amount' => $total_ph_dec]);
+            }
+
+            if($employee->sss) {
+
+                $total_salary = 0;
+
+                foreach($attendance as $att) {
+                    $hours = null;
+                    if($att->diff_in_hours > 9) {
+                        $hours = 9;
+                    }
+                    else {
+                        $hours = $att->diff_in_hours;
+                    }
+
+                    $per_day = $att->rate * ($hours / 9);
+
+                    $total_salary += $per_day;
+                }
+
+                $total_sss_dec = $total_salary * 0.045;
+
+                array_push($deductions, ['type' => 'SSS', 'amount' => $total_sss_dec]);
+            }
+        }
+
         $data = [
             'attendance' => $attendance,
             'employee' => $request,
-            'daily' => $daily
+            'daily' => $daily,
+            'deductions' => $deductions
         ];
 
         return $data;

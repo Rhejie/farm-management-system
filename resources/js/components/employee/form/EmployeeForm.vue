@@ -51,6 +51,16 @@
                     <el-input v-model="form.position" placeholder="Position"></el-input>
                 </el-form-item>
             </div>
+            <div class="col-md-6">
+                <el-form-item label="SSS" prop="sss">
+                    <el-input @keypress.native="isNumber($event)" v-model="form.sss" placeholder="SSS"></el-input>
+                </el-form-item>
+            </div>
+            <div class="col-md-6">
+                <el-form-item label="Philhealth" prop="philhealth">
+                    <el-input @keypress.native="isNumber($event)" v-model="form.philhealth" placeholder="Philhealth"></el-input>
+                </el-form-item>
+            </div>
             <div class="col-md-12">
                 <el-form-item label="Address" prop="address">
                     <el-input v-model="form.address" type="textarea" placeholder="Address"></el-input>
@@ -130,6 +140,8 @@ export default {
                 address: '',
                 contact: '',
                 position: '',
+                sss: '',
+                philhealth: '',
                 qrcode: ''
             },
             rules : {
@@ -243,6 +255,8 @@ export default {
                 if(this.form.position)formData.append('position', this.form.position);
                 if(this.form.address)formData.append('address', this.form.address);
                 if(this.form.contact)formData.append('contact', this.form.contact);
+                if(this.form.sss)formData.append('sss', this.form.sss);
+                if(this.form.philhealth)formData.append('philhealth', this.form.philhealth);
                 if(this.form.qrcode)formData.append('qrcode', this.form.qrcode);
                 if(this.form.file)formData.append('file', this.form.file);
                 if(this.form.file_name)formData.append('file_name', this.form.file_name);
@@ -274,6 +288,8 @@ export default {
                 if(this.form.position)formData.append('position', this.form.position);
                 if(this.form.address)formData.append('address', this.form.address);
                 if(this.form.contact)formData.append('contact', this.form.contact);
+                if(this.form.sss)formData.append('sss', this.form.sss);
+                if(this.form.philhealth)formData.append('philhealth', this.form.philhealth);
                 if(this.form.file)formData.append('file', this.form.file);
                 if(this.form.file_name)formData.append('file_name', this.form.file_name);
                 if(this.form.remove_file)formData.append('remove_file', this.form.remove_file);

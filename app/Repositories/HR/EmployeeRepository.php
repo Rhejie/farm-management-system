@@ -53,6 +53,8 @@ class EmployeeRepository extends Repository {
         $data->gender = $request->gender;
         $data->contact = $request->contact;
         $data->position = $request->position;
+        $data->sss = $request->sss;
+        $data->philhealth = $request->philhealth;
         $data->address = $request->address;
         $data->qrcode = $request->qrcode;
 
@@ -90,6 +92,8 @@ class EmployeeRepository extends Repository {
         $data->gender = $request->gender;
         $data->contact = $request->contact;
         $data->position = $request->position;
+        $data->sss = $request->sss;
+        $data->philhealth = $request->philhealth;
         $data->address = $request->address;
 
         if($request->hasFile('file')) {

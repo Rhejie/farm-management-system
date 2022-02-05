@@ -47,6 +47,8 @@
                                     <el-card class="box-card">
                                         <div  class="text item">
                                             <el-descriptions :column="3" style="font-size: 30px">
+                                                <el-descriptions-item label="SSS">{{profile.sss}}</el-descriptions-item>
+                                                <el-descriptions-item label="Philhealth">{{profile.philhealth}}</el-descriptions-item>
                                                 <el-descriptions-item label="Gender">{{profile.gender}}</el-descriptions-item>
                                                 <el-descriptions-item label="Birthday">{{profile.birthday}}</el-descriptions-item>
                                                 <el-descriptions-item label="Contact">{{profile.contact}}</el-descriptions-item>
