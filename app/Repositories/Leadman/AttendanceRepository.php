@@ -3,6 +3,7 @@
 namespace App\Repositories\Leadman;
 
 use App\Models\Leadman\Attendance;
+use App\Models\Leadman\DailyOperation;
 use App\Repositories\Repository;
 use Carbon\Carbon;
 
@@ -205,9 +206,29 @@ class AttendanceRepository extends Repository {
             ->where('date', '>=', $request->date_from)
             ->where('date', '<=', $request->date_to)
             ->get();
+        $daily = [];
+        foreach($attendance as $att) {
+
+            $dailyOperations  = DailyOperation::with(['task'])->where('date', $att->date)
+                ->whereHas('dailyOperationTeam', function ($query) use ($request)  {
+                    $query->where(function ($query) use ($request) {
+                        $query->whereHas('dailyOperationTeamMember', function ($query) use ($request) {
+                            $query->where(function ($query) use ($request) {
+                                $query->where('employee_id', $request->employee_id);
+                            });
+                        });
+                    });
+                })->first();
+
+               if(!empty($dailyOperations)) {
+                    $att->rate = $dailyOperations->task->daily_rate;
+                    $att->task = $dailyOperations->task->name;
+               }
+
+            array_push($daily, $dailyOperations);
+        }
 
         $attendance = $attendance->map(function($data) {
-
             $time_date_in = new Carbon($data->date." ".$data->time_in);
             $time_date_out = new Carbon($data->date." ".$data->time_out);
 
@@ -225,12 +246,15 @@ class AttendanceRepository extends Repository {
             $data->date_time_out = $time_date_out;
 
             if($diff_in_hours == 9 || $diff_in_hours >= 9) {
+                $number_of_hours = 8;
                 $data->status = 'Full';
             }
             if($diff_in_hours == 4 || $diff_in_hours < 5) {
+                $number_of_hours = $diff_in_hours;
                 $data->status = 'Half Day';
             }
             if($diff_in_hours < 4 || $diff_in_hours < 9) {
+                $number_of_hours = $diff_in_hours;
                 $data->status = 'Under Time';
             }
 
@@ -241,7 +265,8 @@ class AttendanceRepository extends Repository {
 
         $data = [
             'attendance' => $attendance,
-            'employee' => $request
+            'employee' => $request,
+            'daily' => $daily
         ];
 
         return $data;

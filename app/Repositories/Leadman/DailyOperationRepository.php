@@ -3,8 +3,12 @@
 namespace App\Repositories\Leadman;
 
 use App\Models\Leadman\DailyOperation;
+use App\Models\Leadman\DailyOperationTeam;
+use App\Models\Leadman\DailyOperationTeamMember;
+use App\Models\Leadman\Team;
 use App\Repositories\Repository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DailyOperationRepository extends Repository {
 
@@ -16,8 +20,12 @@ class DailyOperationRepository extends Repository {
 
     public function getOperations($params) {
 
-        $operations = $this->model()->with(['team', 'area', 'task'])
-            ->where(\DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'));
+        $operations = $this->model()->with(['dailyOperationTeam' => function($query) {
+            $query->with(['dailyOperationTeamMember' => function($query) {
+                $query->with(['employee']);
+            }]);
+        },'team', 'area', 'task'])
+            ->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'));
 
         if($params->search) {
 
@@ -50,8 +58,12 @@ class DailyOperationRepository extends Repository {
 
     public function getUndeployedOperations($params) {
 
-        $operations = $this->model()->with(['team', 'area', 'task'])
-            ->where(\DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'))
+        $operations = $this->model()->with(['dailyOperationTeam' => function($query) {
+            $query->with(['dailyOperationTeamMember' => function($query) {
+                $query->with(['employee']);
+            }]);
+        },'team', 'area', 'task'])
+            ->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'))
             ->where('is_deploy', 0);
 
         if($params->search) {
@@ -99,11 +111,33 @@ class DailyOperationRepository extends Repository {
         $data->area_id = $request->area_id;
         $data->task_id = $request->task_id;
         $data->date = $request->date;
-        $data->members = $request->members;
 
         if($data->save()) {
 
-            return $this->model()->with(['team', 'area', 'task'])->find($data->id);
+            $team_info = Team::with(['members'])->find($data->team_id);
+
+            $team = new DailyOperationTeam();
+            $team->daily_operation_id = $data->id;
+            $team->team_id = $data->team_id;
+            $team->name = $team_info->name;
+            $team->description = $team_info->description;
+
+            if($team->save()) {
+
+                foreach($team_info->members as $member) {
+
+                    $team_member = new DailyOperationTeamMember();
+                    $team_member->d_o_team_id = $team->id;
+                    $team_member->employee_id = $member->employee_id;
+                    $team_member->save();
+
+                }
+
+            }
+
+            return $this->model()->with(['dailyOperationTeam' => function($query) {
+                $query->with(['dailyOperationTeamMember']);
+            }, 'area', 'task'])->find($data->id);
 
         }
 

@@ -4,6 +4,7 @@ namespace App\Repositories\HR;
 
 use App\Models\HR\Employee;
 use App\Repositories\Repository;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeRepository extends Repository {
 
@@ -93,7 +94,7 @@ class EmployeeRepository extends Repository {
 
         if($request->hasFile('file')) {
 
-            \Storage::disk('public')->delete("/employee/profile/". $data->profile);
+            Storage::disk('public')->delete("/employee/profile/". $data->profile);
 
             $folder = '/employee/profile/';
             $media = $request->file('file');
@@ -107,7 +108,7 @@ class EmployeeRepository extends Repository {
         }
         else if($request->remove_file) {
 
-            \Storage::disk('public')->delete("/employee/profile/". $data->profile);
+            Storage::disk('public')->delete("/employee/profile/". $data->profile);
             $data->profile = '';
             $data->profile_path = '';
             $data->profile_name = '';
@@ -141,6 +142,22 @@ class EmployeeRepository extends Repository {
 
         }
 
+    }
+
+    public function searchEmployeeMember($params) {
+
+        $employee = $this->model();
+
+        if($params->search) {
+
+            $employee = $employee->where(function ($query) use ($params) {
+                $query->orWhere('firstname', 'LIKE', "%$params->search%");
+                $query->orWhere('lastname', 'LIKE', "%$params->search%");
+            })->limit(20)->get();
+
+            return $employee;
+
+        }
     }
 
     public function findEmployeeByQrCode($qrcode) {

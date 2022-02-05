@@ -23,6 +23,8 @@ class CreateEmployeesTable extends Migration
             $table->string('gender');
             $table->string('contact');
             $table->string('position');
+            $table->string('sss')->nullable();
+            $table->string('philhealth')->nullable();
             $table->text('address');
             $table->text('profile')->nullable();
             $table->text('profile_path')->nullable();

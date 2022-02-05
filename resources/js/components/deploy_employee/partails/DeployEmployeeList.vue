@@ -25,22 +25,22 @@
                         <div class="img_profile">
                             <h4>MEMBERS</h4>
                             <el-table
-                                :data="props.row.members"
+                                :data="props.row.daily_operation.daily_operation_team.daily_operation_team_member"
                                 style="width: 100%">
                                 <el-table-column
-                                    prop="firstname"
+                                    prop="employee.firstname"
                                     label="FIRSTNAME">
                                 </el-table-column>
                                 <el-table-column
-                                    prop="lastname"
+                                    prop="employee.lastname"
                                     label="LASTNAME">
                                 </el-table-column>
                                 <el-table-column
-                                    prop="middlename"
+                                    prop="employee.middlename"
                                     label="MIDDLENAME">
                                 </el-table-column>
                                 <el-table-column
-                                    prop="position"
+                                    prop="employee.position"
                                     label="POSITION">
                                 </el-table-column>
                             </el-table>
@@ -56,7 +56,7 @@
                         </template>
                 </el-table-column>
                 <el-table-column
-                    prop="team.name"
+                    prop="daily_operation.daily_operation_team.name"
                     label="TEAM"
                     :sortable="true">
                 </el-table-column>

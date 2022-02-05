@@ -123,7 +123,7 @@ export default {
             try {
                 if(query !== '') {
                     this.loading = true;
-                    const res = await this.$API.Employee.searchEmployee(query);
+                    const res = await this.$API.Employee.searchEmployeeMember(query);
                     this.employees = res.data
                     this.loading = false;
                 }
@@ -133,6 +133,7 @@ export default {
         },
         attendanceChange(value) {
             let member = this.employees.find(emp => emp.id == value);
+            console.log(member);
             this.selectedMemebers.unshift(member);
             this.employees = []
             this.form.employee_id = null

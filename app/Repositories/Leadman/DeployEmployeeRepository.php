@@ -7,6 +7,8 @@ use App\Models\Leadman\DailyOperation;
 use App\Models\Leadman\DeployEmployee;
 use App\Repositories\Repository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\FacadesDB;
 
 class DeployEmployeeRepository extends Repository {
 
@@ -18,8 +20,14 @@ class DeployEmployeeRepository extends Repository {
 
     public function getDeploy($params) {
 
-        $employee =$this->model()->with(['area', 'team'])
-        ->where(\DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'));
+        $employee =$this->model()->with(['area', 'team', 'dailyOperation' => function ($query) {
+            $query->with(['dailyOperationTeam' => function ($query) {
+                $query->with(['dailyOperationTeamMember' => function ($query) {
+                    $query->with(['employee']);
+                }]);
+            }]);
+        }])
+        ->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'));
 
         if($params->search) {
 
@@ -50,19 +58,25 @@ class DeployEmployeeRepository extends Repository {
         // $employee =$this->model()->with(['area', 'team', 'task' => function ($query) {
         //     $query->with(['task']);
         // }])
-        // ->where(\DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'))->get();
+        // ->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'))->get();
 
         // $employee = $employee->groupBy([function($val) {
         //     return $val->area->name;
         // }]);
 
         $teams = Area::with(['deployTeam' => function($query){
-            $query->with(['team', 'task' => function($query){
+            $query->with(['dailyOperation' => function($query) {
+                $query->with(['dailyOperationTeam' => function ($query) {
+                    $query->with(['dailyOperationTeamMember' => function ($query) {
+                        $query->with(['employee']);
+                    }]);
+                }]);
+            },'team', 'task' => function($query){
                 $query->with(['task']);
             }]);
         }])->whereHas('deployTeam', function($query) use ($params) {
             $query->where(function($query) use ($params) {
-                $query->where(\DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'));
+                $query->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($params->date))->format('d-m-Y'));
             });
         })->get();
 
@@ -71,7 +85,7 @@ class DeployEmployeeRepository extends Repository {
 
     public function storeDeploy($request) {
         $check = $this->model()
-            ->where(\DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($request->date))->format('d-m-Y'))
+            ->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), (new Carbon($request->date))->format('d-m-Y'))
             ->where('team_id', $request->team_id)->first();
 
             if(!empty($check)) {
@@ -84,7 +98,6 @@ class DeployEmployeeRepository extends Repository {
         $data->team_id = $request->team_id;
         $data->area_id = $request->area_id;
         $data->daily_operation_id = $request->id;
-        $data->members = $request->members;
         $data->date = $request->date;
 
         if($data->save()) {

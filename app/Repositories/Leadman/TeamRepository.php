@@ -89,7 +89,7 @@ class TeamRepository extends Repository {
 
             $teams = $teams->where(function ($query) use ($params) {
                 $query->where('name', 'LIKE', "%$params->search%");
-            })->limit(20)->get();
+            })->with('members')->limit(20)->get();
 
             return $teams;
         }

@@ -74,6 +74,20 @@ class EmployeeController extends Controller
         return response()->json($employee, 200);
     }
 
+    public function searchEmployeeMember(Request $request) {
+
+        $search = $request->search ? $request->search : null;
+
+        $params = [
+            'search' => $search
+        ];
+
+        $employee = $this->employeeRepository->searchEmployeeMember(json_decode(json_encode($params)));
+
+        return response()->json($employee, 200);
+
+    }
+
     public function getProfile($id) {
 
         $employee = $this->employeeRepository->getProfile($id);

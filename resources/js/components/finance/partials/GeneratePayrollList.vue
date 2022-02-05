@@ -3,10 +3,10 @@
         <div class="row">
             <div class="col-md-12" style="padding:10px">
                 <div class="row">
-                    <div class="col-md-6">
+                    <!--<div class="col-md-6">
                         <span v-if="payroll.length > 0">Rate per Day:</span> <br/>
                         <el-input placeholder="Please input rate per day" @change="changeRate" style="width:100%" type="number" v-if="payroll.length > 0" v-model="rate"></el-input>
-                    </div>
+                    </div> -->
                     <div class="col-md-6" v-if="hasOvertime">
                         <span v-if="payroll.length > 0">Rate per hour for overtime:</span> <br/>
                         <el-input placeholder="Please input rate per hour for overtime" @change="changeRateOT" style="width:100%" type="number" v-if="payroll.length > 0" v-model="rate_ot"></el-input>
@@ -61,7 +61,10 @@
                             <el-table-column
                                 prop="rate"
                                 label="RATE">
-
+                            </el-table-column>
+                            <el-table-column
+                                prop="task"
+                                label="TASK">
                             </el-table-column>
                         </el-table-column>
                             <!--<el-table-column

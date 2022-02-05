@@ -25,4 +25,8 @@ class DailyOperation extends Model
     public function team() {
         return $this->belongsTo(Team::class, 'team_id', 'id');
     }
+
+    public function dailyOperationTeam() {
+        return $this->belongsTo(DailyOperationTeam::class, 'id', 'daily_operation_id');
+    }
 }

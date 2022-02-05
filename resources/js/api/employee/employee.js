@@ -19,5 +19,8 @@ export default {
     },
     getProfile(id) {
         return axios.get(`/employee/get-profile/${id}`)
-    }
+    },
+    searchEmployeeMember(search) {
+        return axios.get(`/employee/search-employee-member?search=${search}`)
+    },
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/deploy-employee', [App\Http\Controllers\Leadman\DeployEmployeeController::class, 'index'])->name('deploy-employee.index');
 
 Route::group(['prefix' => 'deploy-employee', 'middleware' => 'auth'], function () {

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/team', [App\Http\Controllers\Leadman\TeamController::class, 'index'])->name('team.index');
 
 Route::group(['prefix' => 'team', 'middleware' => 'auth'], function () {

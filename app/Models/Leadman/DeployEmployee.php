@@ -27,4 +27,8 @@ class DeployEmployee extends Model
         return $this->belongsTo(DailyOperation::class, 'daily_operation_id', 'id');
 
     }
+
+    public function dailyOperation() {
+        return $this->belongsTo(DailyOperation::class, 'daily_operation_id', 'id');
+    }
 }

@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
     require_once base_path('routes/moduleRoutes/banana.php');
     require_once base_path('routes/moduleRoutes/daily-operation.php');
 
+    Route::get('/ge-payroll', [App\Http\Controllers\Finance\FinanceController::class, 'generatePayroll']);
+
     Route::get('/scanner', function () {
 
         return view('scanner.index');
