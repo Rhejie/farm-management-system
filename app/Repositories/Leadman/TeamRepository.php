@@ -102,6 +102,9 @@ class TeamRepository extends Repository {
     public function deleteTeam($id) {
 
         $data = $this->model()->find($id);
+
+        TeamMember::where('team_id', $data->id)->delete();
+
         $data->delete();
 
     }

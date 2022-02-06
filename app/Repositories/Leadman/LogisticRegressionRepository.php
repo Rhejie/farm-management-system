@@ -17,6 +17,12 @@ class LogisticRegressionRepository extends Repository {
 
         $data = $this->model()->with(['area']);
 
+        if($params->area_id && $params->area_id != 'All') {
+
+            $data = $data->where('area_id', $params->area_id);
+
+        }
+
         if($params->search) {
 
             $data = $data->orderBy('id', 'desc')->paginate($params->count, ['*'], 'page', $params->page);

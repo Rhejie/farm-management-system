@@ -25,13 +25,15 @@ class LogisticRegresionController extends Controller
 
     public function getLogistics(Request $request) {
         $page = $request->page ? $request->page : 1;
+        $area_id = $request->area_id ? $request->area_id : 'All';
         $count = $request->count ? $request->count : 10;
         $search = $request->search && $request->search != '' && $request->search !== 'null' ? $request->search : null;
 
         $params = [
             'page' => $page,
             'count' => $count,
-            'search' => $search
+            'search' => $search,
+            'area_id' => $area_id
         ];
         $logistics = $this->logisticRegressionRepository->getLogisticRegresions(json_decode(json_encode($request->all())));
 

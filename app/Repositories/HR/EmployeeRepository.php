@@ -157,7 +157,7 @@ class EmployeeRepository extends Repository {
             $employee = $employee->where(function ($query) use ($params) {
                 $query->orWhere('firstname', 'LIKE', "%$params->search%");
                 $query->orWhere('lastname', 'LIKE', "%$params->search%");
-            })->limit(20)->get();
+            })->doesntHave('teamMember')->limit(20)->get();
 
             return $employee;
 

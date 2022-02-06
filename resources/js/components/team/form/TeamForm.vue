@@ -50,7 +50,7 @@
                     </el-table-column>
                     <el-table-column>
                         <template slot-scope="scope">
-                            <el-button type="danger" @click="deleteMemember(scope.$index, scope.row.id)">Del</el-button>
+                            <el-button type="danger" @click="deleteMemember(scope.$index, scope.row)">Del</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -85,7 +85,8 @@ export default {
             loading: false,
             employees: [],
             selectedMemebers: [],
-            remove_members: []
+            remove_members: [],
+            remove_members_info: []
         }
     },
     created() {
@@ -121,6 +122,9 @@ export default {
             });
         },
         resetForm(formName) {
+            this.remove_members_info = []
+            this.remove_members = []
+            this.employees = []
             this.$refs[formName].resetFields();
         },
         async remoteMethodEmployee(query) {
@@ -128,7 +132,17 @@ export default {
                 if(query !== '') {
                     this.loading = true;
                     const res = await this.$API.Employee.searchEmployeeMember(query);
-                    this.employees = res.data
+                    if(this.remove_members_info.length > 0) {
+                        this.remove_members_info.forEach(member => {
+                            res.data.push(member)
+                        })
+                    }
+                    this.employees = res.data.filter(emp => {
+                        return !this.selectedMemebers.find(element => {
+                            return element.id === emp.id;
+                        });
+                    })
+
                     this.loading = false;
                 }
             } catch (error) {
@@ -143,9 +157,10 @@ export default {
             this.employees = []
             this.form.employee_id = null
         },
-        deleteMemember(index, id) {
+        deleteMemember(index, data) {
             this.selectedMemebers.splice(index, 1)
-            this.remove_members.push(id)
+            this.remove_members_info.push(data)
+            this.remove_members.push(data.id)
         },
         async storeTeam() {
             try {
@@ -174,6 +189,8 @@ export default {
                     message: 'Successfully updated',
                     type: 'success'
                 });
+                this.remove_members_info = []
+                this.remove_members = []
             } catch (error) {
                 console.log(error);
             }

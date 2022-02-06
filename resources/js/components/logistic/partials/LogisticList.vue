@@ -1,6 +1,14 @@
 <template>
     <el-card class="box-card">
         <div  class="text item">
+            <el-select v-model="area_id" @change="areaChange" clearable="" placeholder="Select">
+                <el-option
+                    v-for="item in areas"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                </el-option>
+            </el-select>
             <el-button size="mini" type="primary" @click="addLogistic" style="float:right;">Add Logistic Regression</el-button>
             <el-input
                 size="mini"
@@ -149,6 +157,8 @@ export default {
             mode: '',
             model: {},
             dialogTableVisible: false,
+            area_id: '',
+            areas: []
         }
     },
     created() {
@@ -172,6 +182,8 @@ export default {
             this.dialogTableVisible = false
             this.mode = ''
         })
+
+        this.getAreas();
     },
     methods: {
         async getLogistics() {
@@ -180,6 +192,7 @@ export default {
                     current_size: this.current_size,
                     current_page: this.current_page,
                     search: this.search,
+                    area_id: this.area_id
                 };
 
                 this.loading = true;
@@ -190,6 +203,18 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        async getAreas() {
+            try {
+                const res = await this.$API.Area.getAllAreas();
+                this.areas = res.data
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        areaChange(value) {
+            this.area_id = value;
+            this.getLogistics();
         },
         addLogistic() {
             this.dialogTableVisible = true;
