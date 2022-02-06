@@ -188,4 +188,33 @@ class DailyOperationRepository extends Repository {
 
     }
 
+    public function updateTeamAndMeber($params) {
+
+        $operation = $this->model()
+                ->where('team_id', $params->id)
+                ->where(DB::raw("(DATE_FORMAT(date,'%d-%m-%Y'))"), Carbon::now()->format('d-m-Y'))->first();
+
+        if(!empty($operation)) {
+
+            $team_info = Team::with(['members'])->find($params->id);
+
+            $team = DailyOperationTeam::where('daily_operation_id', $operation->id)->first();
+            $team->name = $team_info->name;
+            $team->description = $team_info->description;
+
+            if($team->save()) {
+
+                DailyOperationTeamMember::where('d_o_team_id', $team->id)->delete();
+                foreach($team_info->members as $member) {
+                    $team_member = new DailyOperationTeamMember();
+                    $team_member->d_o_team_id = $team->id;
+                    $team_member->employee_id = $member->employee_id;
+                    $team_member->save();
+
+                }
+
+            }
+        }
+    }
+
 }

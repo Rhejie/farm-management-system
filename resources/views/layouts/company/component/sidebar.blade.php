@@ -123,6 +123,12 @@
             @if(auth()->user()->userType->name == 'Administrator' || auth()->user()->userType->name == 'Leadman')
             <li class="nav-header">PRODUCTION</li>
             <li class="nav-item">
+                <a href="/logistic-regression#/logistics" class="nav-link {{ Route::is('logistic.index') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>Logistic Regression</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="/banana#/yield-report" class="nav-link {{ Route::is('banana.index') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-database"></i>
                     <p>Banana Yield Report</p>

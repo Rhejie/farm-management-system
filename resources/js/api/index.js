@@ -12,6 +12,7 @@ import Operation from './daily_operation/daily_operation'
 import Month from './month/month'
 import Dashboard from './dashboard/dashboard'
 import Report from './report/report'
+import Logistic from './logistic/logistic'
 
 export default {
     Employee,
@@ -27,5 +28,6 @@ export default {
     Operation,
     Month,
     Dashboard,
-    Report
+    Report,
+    Logistic
 }

@@ -13,7 +13,7 @@
                 element-loading-background="rgba(0, 0, 0, 0.8)"
                 :data="reports"
                 style="width: 100%">
-                    <el-table-column type="expand">
+                    <!--<el-table-column type="expand">
                         <template slot-scope="props">
                             <div class="img_profile">
                                 <h4>MEMBERS</h4>
@@ -39,7 +39,7 @@
                                 </el-table>
                             </div>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                         prop="date"
                         label="DATE">

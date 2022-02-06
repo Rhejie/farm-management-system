@@ -285,5 +285,19 @@ export default new VueRouter({
                 }
             ]
         },
+        {
+            path: '/logistic',
+            name: 'Logistic Main Component',
+            props: true,
+            component: () => import('../components/logistic/LogisticMainComponent.vue'),
+            children: [
+                {
+                    path: '/logistics',
+                    name: 'Logistic List',
+                    component: () => import('../components/logistic/LogisticIndex.vue'),
+                    props: true,
+                }
+            ]
+        },
     ]
 })

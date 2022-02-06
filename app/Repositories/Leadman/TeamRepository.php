@@ -9,8 +9,10 @@ use Carbon\Carbon;
 
 class TeamRepository extends Repository {
 
-    public function __construct(Team $model) {
+    private $dailyOperationRepository;
 
+    public function __construct(Team $model, DailyOperationRepository $dailyOperationRepository) {
+        $this->dailyOperationRepository = $dailyOperationRepository;
         parent::__construct($model);
 
     }
@@ -67,8 +69,31 @@ class TeamRepository extends Repository {
         $data->description = $request->description;
 
         if($data->save()) {
+            foreach($request->employees as $employee) {
 
-            return $data;
+                if($employee->status && $employee->status == 'new') {
+
+                    $member = new TeamMember();
+                    $member->team_id = $data->id;
+                    $member->employee_id = $employee->id;
+                    $member->save();
+                }
+
+            }
+
+            foreach ($request->remove_members as $member) {
+
+                $member = TeamMember::where('employee_id', $member)->where('team_id', $data->id)->first();
+                if(!empty($member)) $member->delete();
+            }
+
+            $updatedTeam = $this->model()->with(['members' => function ($query) {
+                $query->with(['employee']);
+            }])->find($data->id);
+
+            $this->dailyOperationRepository->updateTeamAndMeber($updatedTeam);
+
+            return $updatedTeam;
 
         }
 

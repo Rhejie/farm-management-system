@@ -50,7 +50,7 @@
                     </el-table-column>
                     <el-table-column>
                         <template slot-scope="scope">
-                            <el-button type="danger" @click="deleteMemember(scope.$index)">Del</el-button>
+                            <el-button type="danger" @click="deleteMemember(scope.$index, scope.row.id)">Del</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -84,7 +84,8 @@ export default {
             },
             loading: false,
             employees: [],
-            selectedMemebers: []
+            selectedMemebers: [],
+            remove_members: []
         }
     },
     created() {
@@ -136,13 +137,15 @@ export default {
         },
         attendanceChange(value) {
             let member = this.employees.find(emp => emp.id == value);
+            member.status = 'new'
             console.log(member);
             this.selectedMemebers.unshift(member);
             this.employees = []
             this.form.employee_id = null
         },
-        deleteMemember(index) {
+        deleteMemember(index, id) {
             this.selectedMemebers.splice(index, 1)
+            this.remove_members.push(id)
         },
         async storeTeam() {
             try {
@@ -162,6 +165,7 @@ export default {
         async updateTeam() {
             try {
                 this.form.employees = this.selectedMemebers
+                this.form.remove_members = this.remove_members
 
                 const res = await this.$API.Team.updateTeam(this.model.id, this.form)
                 this.$EventDispatcher.fire('UPDATE_DATA', res.data);
