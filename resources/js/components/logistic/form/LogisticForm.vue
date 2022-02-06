@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <!--<div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
                         <el-form-item label="Stem Cut" prop="stem_cut_y">
@@ -75,7 +75,7 @@
                         </el-form-item>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-12">
                 <el-form-item style="float:right">
                     <el-button type="primary" @click="submitForm('form')">Submit</el-button>
