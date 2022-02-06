@@ -1,7 +1,7 @@
 <template>
     <el-card class="box-card">
         <div  class="text item">
-            <el-select v-model="area_id" @change="areaChange" clearable="" placeholder="Select">
+            <el-select v-model="area_id" @change="areaChange" clearable="" placeholder="Select Area">
                 <el-option
                     v-for="item in areas"
                     :key="item.id"
