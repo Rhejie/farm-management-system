@@ -5,6 +5,8 @@ namespace App\Repositories\Leadman;
 use App\Models\HR\Employee;
 use App\Models\Leadman\Attendance;
 use App\Models\Leadman\DailyOperation;
+use App\Models\Setting\DeductionSetting;
+use App\Models\Setting\FinanceSetting;
 use App\Repositories\Repository;
 use Carbon\Carbon;
 
@@ -273,6 +275,9 @@ class AttendanceRepository extends Repository {
         $deductions = [];
 
         if($employee) {
+
+            $financeSetting = FinanceSetting::first();
+
             if($employee->philhealth) {
 
                 $total_salary = 0;
@@ -291,7 +296,9 @@ class AttendanceRepository extends Repository {
                     $total_salary += $per_day;
                 }
 
-                $total_ph_dec = $total_salary * 0.03;
+                $rate = ($financeSetting->philhealth / 2) / 100;
+
+                $total_ph_dec = $total_salary * $rate;
 
                 array_push($deductions, ['type' => 'PhilHealth', 'amount' => $total_ph_dec]);
             }
@@ -314,7 +321,9 @@ class AttendanceRepository extends Repository {
                     $total_salary += $per_day;
                 }
 
-                $total_sss_dec = $total_salary * 0.045;
+                $rate = ($financeSetting->sss / 2) / 100;
+
+                $total_sss_dec = $total_salary * $rate;
 
                 array_push($deductions, ['type' => 'SSS', 'amount' => $total_sss_dec]);
             }

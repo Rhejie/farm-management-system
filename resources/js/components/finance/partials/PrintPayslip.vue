@@ -10,7 +10,6 @@
                     <el-descriptions border :column="1">
                         <el-descriptions-item label="Pay Period">{{fromDate}} - {{toDate}}</el-descriptions-item>
                         <el-descriptions-item label="Position">{{position}}</el-descriptions-item>
-                        <el-descriptions-item label="Rate">P {{this.payslip.rate}}</el-descriptions-item>
                     </el-descriptions>
                     <table class="table table-bordered table-sm">
                         <thead>
@@ -138,7 +137,7 @@ export default {
         overtime_salary() {
             let salary = 0
             this.payslip.overtime.forEach(reg => {
-                salary += parseFloat(reg.overtime_rate)
+                salary = parseFloat(parseFloat(salary) + parseFloat(parseFloat(reg.overtime_rate) * parseFloat(reg.total_hours_ot))).toFixed(2)
             })
 
             return salary

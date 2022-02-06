@@ -9,5 +9,11 @@ export default {
     },
     storePayroll(data) {
         return axios.post(`/finance/store-payroll`, data)
+    },
+    getOvertimeRate() {
+        return axios.get(`/finance/overtime-rate`);
+    },
+    updateFinanceSetting(id, data) {
+        return axios.post(`/finance/update-finance-setting/${id}`, data)
     }
 }

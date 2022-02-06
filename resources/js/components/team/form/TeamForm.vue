@@ -97,7 +97,10 @@ export default {
                 name: this.model.name,
                 description: this.model.description,
             }
-            this.selectedMemebers = this.model.employees
+            this.selectedMemebers = this.model.members.map(member => {
+                member.employee.status = 'old'
+                return member.employee
+            })
         }
     },
     methods: {
@@ -180,7 +183,10 @@ export default {
                     name: newVal.name,
                     description: newVal.description,
                 }
-                this.selectedMemebers = newVal.employees
+                this.selectedMemebers = newVal.members.map(member => {
+                    member.employee.status = 'old'
+                    return member.employee
+                })
             }
         },
         mode(val) {

@@ -202,6 +202,14 @@
             </li>
             @endif
             <li class="nav-header">SETTINGS</li>
+            @if(auth()->user()->userType->name == 'Administrator' || auth()->user()->userType->name == 'Finance Staff')
+            <li class="nav-item">
+                <a href="/finance-setting" class="nav-link {{ Route::is('finance.setting') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-file"></i>
+                    <p>Finance Setting</p>
+                </a>
+            </li>
+            @endif
             <li class="nav-item">
                 <a href="{{ route('logout') }}"
                 onclick="event.preventDefault();

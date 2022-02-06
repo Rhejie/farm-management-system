@@ -192,7 +192,8 @@ export default {
         overtime_rate() {
             let total = 0
             this.payroll.overtime.forEach(over => {
-                total = parseFloat(parseFloat(total) + parseFloat(over.overtime_rate)).toFixed(2)
+                // total = parseFloat(parseFloat(total) + parseFloat(over.overtime_rate)).toFixed(2)
+                total = parseFloat(parseFloat(total) + parseFloat(parseFloat(over.overtime_rate) * parseFloat(over.total_hours_ot))).toFixed(2)
             })
             return total;
         },

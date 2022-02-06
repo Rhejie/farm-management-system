@@ -7,10 +7,10 @@
                         <span v-if="payroll.length > 0">Rate per Day:</span> <br/>
                         <el-input placeholder="Please input rate per day" @change="changeRate" style="width:100%" type="number" v-if="payroll.length > 0" v-model="rate"></el-input>
                     </div> -->
-                    <div class="col-md-6" v-if="hasOvertime">
+                    <!--<div class="col-md-6" v-if="hasOvertime">
                         <span v-if="payroll.length > 0">Rate per hour for overtime:</span> <br/>
                         <el-input placeholder="Please input rate per hour for overtime" @change="changeRateOT" style="width:100%" type="number" v-if="payroll.length > 0" v-model="rate_ot"></el-input>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-md-8">
@@ -142,21 +142,32 @@
                                 prop="type"
                                 label="TYPE">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.type"></el-input>
+                                        <template v-if="scope.row.type != 'SSS' && scope.row.type != 'PhilHealth'">
+                                            <el-input v-model="scope.row.type"></el-input>
+                                        </template>
+                                        <template v-else>
+                                            {{scope.row.type}}
+                                        </template>
                                     </template>
                             </el-table-column>
                             <el-table-column
                                 prop="amount"
                                 label="AMOUNT">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.amount" @change="checkDeduction($event, scope.$index)" type="number"></el-input>
+                                        <template v-if="scope.row.type != 'SSS' && scope.row.type != 'PhilHealth'">
+                                            <el-input v-model="scope.row.amount" @change="checkDeduction($event, scope.$index)" type="number"></el-input>
+                                        </template>
+                                        <template v-else>
+                                            {{scope.row.amount}}
+                                        </template>
                                     </template>
                             </el-table-column>
                             <el-table-column
+                                label="Action"
                                 fixed="right"
                                 width="80">
                                     <template slot-scope="scope">
-                                        <el-button @click="deleteDeductions(scope.$index)"><i class="fas fa-trash"></i></el-button>
+                                        <el-button v-if="scope.row.type != 'SSS' && scope.row.type != 'PhilHealth'" @click="deleteDeductions(scope.$index)"><i class="fas fa-trash"></i></el-button>
                                     </template>
                             </el-table-column>
                         </el-table-column>
@@ -196,10 +207,11 @@ export default {
             deductions: [],
             overtime: [],
             salaryError: false,
+            overtime_rate_per_hour: null
         }
     },
     created() {
-
+        this.getOvertimeRate();
         this.$EventDispatcher.listen('RESET_FORM', data => {
             console.log(data)
             this.payroll = []
@@ -209,7 +221,10 @@ export default {
         this.$EventDispatcher.listen('NEW_GENERATE_PAYROLL', data => {
             this.rate = 0
             this.rate_ot = 0
-            this.payroll = data.attendance
+            this.payroll = data.attendance.map(att => {
+                att.overtime_rate = this.overtime_rate_per_hour.overtime_rate_hour
+                return att
+            })
             this.employee = data.employee
             this.deductions = data.deductions
             this.loading = false
@@ -271,17 +286,7 @@ export default {
             if(payroll.length > 0) {
                 let overtime = 0
                 payroll.forEach(pay => {
-                    let rate = pay.hasOwnProperty('overtime_rate')
-                    if(!rate) {
-                        return 0
-                    }
-                    else {
-                        if(pay.overtime_rate == '') {
-                            return
-                        }
-
-                        overtime = parseFloat(parseFloat(overtime) + parseFloat(pay.overtime_rate)).toFixed(2)
-                    }
+                    overtime = parseFloat(parseFloat(overtime) + parseFloat(parseFloat(pay.overtime_rate) * parseFloat(pay.total_hours_ot))).toFixed(2)
                 })
 
                 return overtime
@@ -320,23 +325,16 @@ export default {
     methods: {
         async generatePayroll() {
             try {
-                if(!this.rate || this.rate === 0) {
-                    this.$notify.error({
-                        title: 'Error',
-                        message: 'Please input rate per day'
-                    });
-                    return;
-                }
                 let overtime = this.payroll.filter(pay => pay.ot_in != null && pay.ot_out != null && pay.ot_status == 'Approved')
-                if(overtime.length > 0) {
-                    if(!this.rate_ot || this.rate_ot === 0) {
-                        this.$notify.error({
-                            title: 'Error',
-                            message: 'Please input rate per hour for overtime'
-                        });
-                        return;
-                    }
-                }
+                // if(overtime.length > 0) {
+                //     if(!this.rate_ot || this.rate_ot === 0) {
+                //         this.$notify.error({
+                //             title: 'Error',
+                //             message: 'Please input rate per hour for overtime'
+                //         });
+                //         return;
+                //     }
+                // }
                 this.employee.regular = this.payroll
                 this.employee.rate = this.rate
                 this.employee.overtime = overtime
@@ -398,6 +396,14 @@ export default {
             }
             if(this.salaryError) {
                 this.deductions.splice(index, 1)
+            }
+        },
+        async getOvertimeRate() {
+            try {
+                const res = await this.$API.Finance.getOvertimeRate();
+                this.overtime_rate_per_hour = res.data
+            } catch (error) {
+                console.log(error);
             }
         }
     },

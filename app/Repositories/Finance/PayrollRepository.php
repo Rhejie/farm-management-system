@@ -4,6 +4,8 @@ namespace App\Repositories\Finance;
 
 use App\Models\Finance\Payroll;
 use App\Models\Finance\PayrollItem;
+use App\Models\Setting\FinanceSetting;
+use App\Models\Setting\OvertimeSetting;
 use App\Repositories\Leadman\AttendanceRepository;
 use App\Repositories\Repository;
 use Carbon\Carbon;
@@ -90,6 +92,28 @@ class PayrollRepository extends Repository {
         $payroll = $this->model()->with(['employee', 'item'])->find($id);
 
         return $payroll;
+
+    }
+
+    public function getOvertimeRate() {
+
+        $overtime = FinanceSetting::first();
+
+        return $overtime;
+
+    }
+
+    public function updateFinanceSetting($id, $request) {
+
+        $setting = FinanceSetting::find($id);
+        $setting->sss = $request->sss;
+        $setting->philhealth = $request->philhealth;
+        $setting->overtime_rate_hour = $request->overtime_rate_hour;
+        if($setting->save()) {
+
+            return $setting;
+
+        }
 
     }
 }

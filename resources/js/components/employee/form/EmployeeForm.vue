@@ -200,6 +200,8 @@ export default {
                 position: this.model.position,
                 address: this.model.address,
                 contact: this.model.contact,
+                sss: this.model.sss,
+                philhealth: this.model.philhealth,
                 qrcode: this.model.qrcode
             }
         }
@@ -387,6 +389,8 @@ export default {
                     birthday: newVal.birthday,
                     address: newVal.address,
                     contact: newVal.contact,
+                    sss: newVal.sss,
+                    philhealth: newVal.philhealth,
                     position: newVal.position,
                     qrcode: newVal.qrcode,
                 }

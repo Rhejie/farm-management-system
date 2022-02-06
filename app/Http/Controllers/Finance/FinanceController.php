@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Finance;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting\FinanceSetting;
 use App\Repositories\Finance\PayrollRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,6 +24,11 @@ class FinanceController extends Controller
 
         return view('finance.payroll.index');
 
+    }
+
+    public function financeSetting() {
+        $setting = FinanceSetting::first();
+        return view('finance_setting.index', compact('setting'));
     }
 
     public function getPayrolls(Request $request) {
@@ -90,5 +96,21 @@ class FinanceController extends Controller
 
 
         return $pdf->download($payroll->employee->lastname.'-payslip.pdf');
+    }
+
+    public function getOvertimeRate() {
+
+        $overtime = $this->payrollRepository->getOvertimeRate();
+
+        return response()->json($overtime, 200);
+
+    }
+
+    public function updateFinanceSetting($id, Request $request) {
+
+        $setting = $this->payrollRepository->updateFinanceSetting($id, json_decode(json_encode($request->all())));
+
+        return response()->json($setting, 200);
+
     }
 }
