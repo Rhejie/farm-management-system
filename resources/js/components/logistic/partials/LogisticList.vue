@@ -9,6 +9,7 @@
                     :value="item.id">
                 </el-option>
             </el-select>
+            <el-button type="primary" @click="showDetails">Show Data</el-button>
             <el-button size="mini" type="primary" @click="addLogistic" style="float:right;">Add Logistic Regression</el-button>
             <el-input
                 size="mini"
@@ -32,34 +33,29 @@
                     <el-table-column
                         prop="area.name"
                         label="Area"
-                        width="160"
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
                         prop="bud_injection_x1"
                         label="BUD INJECTION (X1)"
-                        width="160"
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
                         prop="bu_injection_date"
-                        width="160"
                         label="BUD INJECTION DATE"
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
                         prop="bagging_report_x2"
-                        width="170"
                         label="BAGGING REPORT (X2)"
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
                         prop="bagging_report_date"
-                        width="170"
                         label="BAGGING REPORT DATE"
                         :sortable="true">
                     </el-table-column>
-                    <el-table-column
+                    <!--<el-table-column
                         prop="stem_cut_y"
                         label="STEM CUT (Y)"
                         width="150"
@@ -113,7 +109,7 @@
                         width="150"
                         show-overflow-tooltip
                         :sortable="true">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                         fixed="right"
                         width="110"
@@ -215,6 +211,9 @@ export default {
         areaChange(value) {
             this.area_id = value;
             this.getLogistics();
+        },
+        showDetails() {
+            this.$router.push({name: 'Logistic Details'})
         },
         addLogistic() {
             this.dialogTableVisible = true;

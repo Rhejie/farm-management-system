@@ -107,12 +107,18 @@ export default {
                 bud_injection_x1: [
                     { required: true, message: 'Please input bud injection', trigger: 'blur' }
                 ],
+                bu_injection_date: [
+                    { required: true, message: 'Please input bud injection date', trigger: 'blur' }
+                ],
                 area_id: [
                     { required: true, message: 'Please select Area', trigger: 'blur' }
                 ],
-                // bagging_report_x2: [
-                //     { required: true, message: 'Please input bagging report', trigger: 'blur' }
-                // ],
+                bagging_report_x2: [
+                    { required: true, message: 'Please input bagging report', trigger: 'blur' }
+                ],
+                bagging_report_date: [
+                    { required: true, message: 'Please input bagging report date', trigger: 'blur' }
+                ],
                 // stem_cut_y: [
                 //     { required: true, message: 'Please input stem cut', trigger: 'blur' }
                 // ],

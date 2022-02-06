@@ -90,4 +90,12 @@ class LogisticRegresionController extends Controller
         return response()->json($data, 200);
 
     }
+
+    public function getData($id) {
+
+        $data = $this->logisticRegressionRepository->getData($id);
+
+        return response()->json($data, 200);
+
+    }
 }

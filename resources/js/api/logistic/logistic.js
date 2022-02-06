@@ -12,5 +12,8 @@ export default {
     },
     deleteLogistic(id) {
         return axios.post(`/logistic/delete-logistic/${id}`)
+    },
+    getData(id) {
+        return axios.get(`/logistic/get-data/${id}`)
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Leadman\LogisticRegression;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
