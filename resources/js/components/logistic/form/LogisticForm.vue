@@ -2,6 +2,18 @@
     <el-form :model="form" :rules="rules" ref="form" label-position="top" label-width="120px" class="demo-ruleForm">
         <div class="row">
             <div class="col-md-12">
+                <el-form-item label="Area" prop="area_id">
+                    <el-select v-model="form.area_id" @change="areaChange" style="width:100%" placeholder="Select">
+                        <el-option
+                            v-for="item in areas"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </div>
+            <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
                         <el-form-item label="Bud Injection" prop="bud_injection_x1">
@@ -83,6 +95,7 @@ export default {
     data() {
         return {
             form: {
+                area_id: '',
                 bud_injection_x1: '',
                 bu_injection_date: '',
                 bagging_report_x2: '',
@@ -94,6 +107,9 @@ export default {
                 bud_injection_x1: [
                     { required: true, message: 'Please input bud injection', trigger: 'blur' }
                 ],
+                area_id: [
+                    { required: true, message: 'Please select Area', trigger: 'blur' }
+                ],
                 // bagging_report_x2: [
                 //     { required: true, message: 'Please input bagging report', trigger: 'blur' }
                 // ],
@@ -101,6 +117,7 @@ export default {
                 //     { required: true, message: 'Please input stem cut', trigger: 'blur' }
                 // ],
             },
+            areas: []
         }
     },
     created() {
@@ -110,6 +127,8 @@ export default {
 
         if(this.model && this.model.id) {
             this.form = {
+                area_id: this.model.area.name,
+                area_id_id: this.model.area_id,
                 bud_injection_x1: this.model.bud_injection_x1,
                 bu_injection_date: this.model.bu_injection_date,
                 bagging_report_x2: this.model.bagging_report_x2,
@@ -118,6 +137,7 @@ export default {
                 stem_cut_y_date: this.model.stem_cut_y_date
             }
         }
+        this.getAreas();
     },
     methods: {
         submitForm(formName) {
@@ -137,6 +157,18 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+        },
+        async getAreas() {
+            try {
+                const res = await this.$API.Area.getAllAreas();
+                this.areas = res.data
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        areaChange(value) {
+            this.form.area_id_id = null
+            this.form.area_id = value
         },
         async storeLogistic() {
             try {
@@ -176,6 +208,8 @@ export default {
         model(newVal, oldVal) {
             if(newVal != oldVal) {
                 this.form = {
+                    area_id: newVal.area.name,
+                    area_id_id: newVal.area_id,
                     bud_injection_x1: newVal.bud_injection_x1,
                     bu_injection_date: newVal.bu_injection_date,
                     bagging_report_x2: newVal.bagging_report_x2,
@@ -188,6 +222,7 @@ export default {
         mode(val) {
             if(val && val == 'create') {
                 this.form = {
+                    area_id: '',
                     bud_injection_x1: '',
                     bu_injection_date: '',
                     bagging_report_x2: '',

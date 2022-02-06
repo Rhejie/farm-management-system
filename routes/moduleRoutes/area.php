@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/areas', [App\Http\Controllers\Hr\AreaController::class, 'index'])->name('area.index');
 
 Route::group(['prefix' => 'area', 'middleware' => 'auth'], function() {

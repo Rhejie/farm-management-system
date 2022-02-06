@@ -15,7 +15,7 @@ class LogisticRegressionRepository extends Repository {
 
     public function getLogisticRegresions($params) {
 
-        $data = $this->model();
+        $data = $this->model()->with(['area']);
 
         if($params->search) {
 
@@ -36,6 +36,7 @@ class LogisticRegressionRepository extends Repository {
         $data = new $this->model();
 
         $data->bud_injection_x1 = $request->bud_injection_x1;
+        $data->area_id = $request->area_id;
         $data->bu_injection_date = $request->bu_injection_date;
         $data->bagging_report_x2 = $request->bagging_report_x2;
         $data->bagging_report_date = $request->bagging_report_date;
@@ -43,7 +44,7 @@ class LogisticRegressionRepository extends Repository {
         $data->stem_cut_y_date = $request->stem_cut_y_date;
         if($data->save()) {
 
-            return $data;
+            return $this->model()->with(['area'])->find($data->id);
 
         }
 
@@ -51,18 +52,21 @@ class LogisticRegressionRepository extends Repository {
 
     public function updateLogistic($id, $request) {
 
+        $area_id = $request->area_id_id ? $request->area_id_id : $request->area_id;
+
         $data = $this->model()->find($id);
 
         $data->bud_injection_x1 = $request->bud_injection_x1;
         $data->bu_injection_date = $request->bu_injection_date;
         $data->bagging_report_x2 = $request->bagging_report_x2;
+        $data->area_id = $area_id;
         $data->bagging_report_date = $request->bagging_report_date;
         $data->stem_cut_y = $request->stem_cut_y;
         $data->stem_cut_y_date = $request->stem_cut_y_date;
 
         if($data->save()) {
 
-            return $data;
+            return  $this->model()->with(['area'])->find($id);
 
         }
     }

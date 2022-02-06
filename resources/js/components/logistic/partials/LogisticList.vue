@@ -22,6 +22,12 @@
                             </template>
                     </el-table-column>
                     <el-table-column
+                        prop="area.name"
+                        label="Area"
+                        width="160"
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
                         prop="bud_injection_x1"
                         label="BUD INJECTION (X1)"
                         width="160"

@@ -41,7 +41,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="Area" prop="area_id">
-                    <el-select
+                    <!--<el-select
                         v-model="form.area_id"
                         filterable
                         style="width:100%"
@@ -57,6 +57,14 @@
                                 :label="item.name"
                                 :value="item.id">
                             </el-option>
+                    </el-select> -->
+                    <el-select v-model="form.area_id" placeholder="Select">
+                        <el-option
+                            v-for="item in areas"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="Date" prop="date">
@@ -112,6 +120,7 @@ export default {
     },
     created() {
         this.form.date = new Date()
+        this.getAreas();
     },
     methods: {
         submitForm(formName) {
@@ -197,6 +206,14 @@ export default {
                     type: 'success'
                 });
                 this.resetForm('form');
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async getAreas() {
+            try {
+                const res = await this.$API.Area.getAllAreas();
+                this.areas = res.data
             } catch (error) {
                 console.log(error);
             }

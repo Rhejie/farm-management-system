@@ -1,7 +1,7 @@
 <template>
     <el-card class="box-card">
         <div  class="text item">
-            <el-select
+            <!--<el-select
                 v-model="area"
                 filterable
                 style="width:30%; margin-bottom: 10px"
@@ -17,6 +17,17 @@
                         :label="item.name"
                         :value="item.id">
                     </el-option>
+            </el-select> -->
+
+            <el-select v-model="area"
+                @change="changeArea"
+                placeholder="Select">
+                <el-option
+                    v-for="item in areas"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                </el-option>
             </el-select>
             <line-chart :chartdata="chartData" v-if="!loadingData" :options="chartOptions"></line-chart>
 
@@ -111,6 +122,7 @@
         },
         async created() {
             await this.getBananaReport()
+            this.getAreas()
         },
         methods: {
             async getBananaReport() {
@@ -152,6 +164,14 @@
                 this.area = value;
                 this.getBananaReport()
             },
-        }
+            async getAreas() {
+                try {
+                    const res = await this.$API.Area.getAllAreas();
+                    this.areas = res.data
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        },
     }
 </script>
