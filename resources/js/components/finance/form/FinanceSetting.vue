@@ -27,12 +27,12 @@
                             <el-form :model="form" :rules="rules" ref="form" label-position="top" label-width="120px" class="demo-ruleForm">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <el-form-item label="SSS" prop="sss">
+                                        <el-form-item label="SSS %" prop="sss">
                                             <el-input v-model="form.sss" type="number" placeholder="SSS"></el-input>
                                         </el-form-item>
                                     </div>
                                     <div class="col-md-12">
-                                        <el-form-item label="PhilHealth" prop="philhealth">
+                                        <el-form-item label="PhilHealth %" prop="philhealth">
                                             <el-input v-model="form.philhealth" type="number" placeholder="PhilHealth"></el-input>
                                         </el-form-item>
                                     </div>
