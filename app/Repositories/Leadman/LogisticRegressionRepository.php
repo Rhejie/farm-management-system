@@ -118,8 +118,10 @@ class LogisticRegressionRepository extends Repository {
             $avr_x2m22 = 0;
 
             foreach ($logistics as $key => $value) {
+                
                 $avr_x1m12 += $value->x1m12;
                 $avr_x2m22 += $value->x2m22;
+
             }
 
             $q1 = sqrt($avr_x1m12 / $countLogistic);
