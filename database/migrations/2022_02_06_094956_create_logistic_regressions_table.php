@@ -17,9 +17,9 @@ class CreateLogisticRegressionsTable extends Migration
             $table->id();
             $table->float('bud_injection_x1', 20, 2);
             $table->date('bu_injection_date')->nullable();
-            $table->float('bagging_report_x2', 20, 2);
+            $table->float('bagging_report_x2', 20, 2)->nullable();
             $table->date('bagging_report_date')->nullable();
-            $table->float('stem_cut_y', 20, 2);
+            $table->float('stem_cut_y', 20, 2)->nullable();
             $table->date('stem_cut_y_date')->nullable();
             $table->timestamps();
         });

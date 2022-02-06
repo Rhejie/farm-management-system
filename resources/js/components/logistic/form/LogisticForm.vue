@@ -2,19 +2,67 @@
     <el-form :model="form" :rules="rules" ref="form" label-position="top" label-width="120px" class="demo-ruleForm">
         <div class="row">
             <div class="col-md-12">
-                <el-form-item label="Bud Injection" prop="bud_injection_x1">
-                    <el-input v-model="form.bud_injection_x1" type="number" placeholder="Bud Injection"></el-input>
-                </el-form-item>
+                <div class="row">
+                    <div class="col-md-6">
+                        <el-form-item label="Bud Injection" prop="bud_injection_x1">
+                            <el-input v-model="form.bud_injection_x1" type="number" placeholder="Bud Injection"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class="col-md-6">
+                        <el-form-item label="Bud Injection Date" prop="bu_injection_date">
+                            <el-date-picker
+                                v-model="form.bu_injection_date"
+                                type="date"
+                                style="width:100%"
+                                format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd"
+                                placeholder="Select date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </div>
+                </div>
             </div>
             <div class="col-md-12">
-                <el-form-item label="Bagging Report" prop="bagging_report_x2">
-                    <el-input v-model="form.bagging_report_x2" type="number" placeholder="Bagging Report"></el-input>
-                </el-form-item>
+                <div class="row">
+                    <div class="col-md-6">
+                        <el-form-item label="Bagging Report" prop="bagging_report_x2">
+                            <el-input v-model="form.bagging_report_x2" type="number" placeholder="Bagging Report"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class="col-md-6">
+                        <el-form-item label="Bagging Report Date" prop="bagging_report_date">
+                            <el-date-picker
+                                v-model="form.bagging_report_date"
+                                type="date"
+                                style="width:100%"
+                                format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd"
+                                placeholder="Select date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </div>
+                </div>
             </div>
             <div class="col-md-12">
-                <el-form-item label="Stem Cut" prop="stem_cut_y">
-                    <el-input v-model="form.stem_cut_y" type="number" placeholder="Stem Cut"></el-input>
-                </el-form-item>
+                <div class="row">
+                    <div class="col-md-6">
+                        <el-form-item label="Stem Cut" prop="stem_cut_y">
+                            <el-input v-model="form.stem_cut_y" type="number" placeholder="Stem Cut"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class="col-md-6">
+                        <el-form-item label="Stem Cut Date" prop="stem_cut_y_date">
+                            <el-date-picker
+                                v-model="form.stem_cut_y_date"
+                                type="date"
+                                style="width:100%"
+                                format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd"
+                                placeholder="Select date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </div>
+                </div>
             </div>
             <div class="col-md-12">
                 <el-form-item style="float:right">
@@ -36,8 +84,11 @@ export default {
         return {
             form: {
                 bud_injection_x1: '',
+                bu_injection_date: '',
                 bagging_report_x2: '',
+                bagging_report_date: '',
                 stem_cut_y: '',
+                stem_cut_y_date: ''
             },
             rules : {
                 bud_injection_x1: [
@@ -59,9 +110,12 @@ export default {
 
         if(this.model && this.model.id) {
             this.form = {
-                name: this.model.name,
-                daily_rate: this.model.daily_rate,
-                description: this.model.description,
+                bud_injection_x1: this.model.bud_injection_x1,
+                bu_injection_date: this.model.bu_injection_date,
+                bagging_report_x2: this.model.bagging_report_x2,
+                bagging_report_date: this.model.bagging_report_date,
+                stem_cut_y: this.model.stem_cut_y,
+                stem_cut_y_date: this.model.stem_cut_y_date
             }
         }
     },
@@ -70,11 +124,11 @@ export default {
             this.$refs[formName].validate((valid) => {
             if (valid) {
                 if(this.mode == 'update') {
-                    this.updateTask();
+                    this.updateLogistic();
                     return;
                 }
 
-                this.storeTask();
+                this.storeLogistic();
             } else {
                 console.log('error submit!!');
                 return false;
@@ -84,9 +138,12 @@ export default {
         resetForm(formName) {
             this.$refs[formName].resetFields();
         },
-        async storeTask() {
+        async storeLogistic() {
             try {
-                const res = await this.$API.Task.storeTask(this.form)
+                this.form.bu_injection_date = this.$df.formatDate(this.form.bu_injection_date, "YYYY-MM-DD")
+                this.form.bagging_report_date = this.$df.formatDate(this.form.bagging_report_date, "YYYY-MM-DD")
+                this.form.stem_cut_y_date = this.$df.formatDate(this.form.stem_cut_y_date, "YYYY-MM-DD")
+                const res = await this.$API.Logistic.storeLogistic(this.form)
                 this.$EventDispatcher.fire('NEW_DATA', res.data);
                 this.$notify({
                     title: 'Success',
@@ -98,9 +155,12 @@ export default {
                 console.log(error);
             }
         },
-        async updateTask() {
+        async updateLogistic() {
             try {
-                const res = await this.$API.Task.updateTask(this.model.id, this.form)
+                this.form.bu_injection_date = this.$df.formatDate(this.form.bu_injection_date, "YYYY-MM-DD")
+                this.form.bagging_report_date = this.$df.formatDate(this.form.bagging_report_date, "YYYY-MM-DD")
+                this.form.stem_cut_y_date = this.$df.formatDate(this.form.stem_cut_y_date, "YYYY-MM-DD")
+                const res = await this.$API.Logistic.updateLogistic(this.model.id, this.form)
                 this.$EventDispatcher.fire('UPDATE_DATA', res.data);
                 this.$notify({
                     title: 'Success',
@@ -116,17 +176,24 @@ export default {
         model(newVal, oldVal) {
             if(newVal != oldVal) {
                 this.form = {
-                    id: newVal.id,
-                    name: newVal.name,
-                    daily_rate: newVal.daily_rate,
-                    description: newVal.description,
+                    bud_injection_x1: newVal.bud_injection_x1,
+                    bu_injection_date: newVal.bu_injection_date,
+                    bagging_report_x2: newVal.bagging_report_x2,
+                    bagging_report_date: newVal.bagging_report_date,
+                    stem_cut_y: newVal.stem_cut_y,
+                    stem_cut_y_date: newVal.stem_cut_y_date
                 }
             }
         },
         mode(val) {
             if(val && val == 'create') {
                 this.form = {
-                    name: ''
+                    bud_injection_x1: '',
+                    bu_injection_date: '',
+                    bagging_report_x2: '',
+                    bagging_report_date: '',
+                    stem_cut_y: '',
+                    stem_cut_y_date: ''
                 }
             }
         }

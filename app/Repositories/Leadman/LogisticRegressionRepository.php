@@ -13,9 +13,19 @@ class LogisticRegressionRepository extends Repository {
 
     }
 
-    public function getLogisticRegresions() {
+    public function getLogisticRegresions($params) {
 
-        $data = $this->model()->get();
+        $data = $this->model();
+
+        if($params->search) {
+
+            $data = $data->orderBy('id', 'desc')->paginate($params->count, ['*'], 'page', $params->page);
+
+            return $data;
+
+        }
+
+        $data = $data->orderBy('id', 'desc')->paginate($params->count, ['*'], 'page', $params->page);
 
         return $data;
 

@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 export default {
-    getLogistics() {
-        return axios.get(`/logistic/get-logistics`)
+    getLogistics(params) {
+        return axios.get(`/logistic/get-logistics?page=${params.current_page}&count=${params.current_size}&search=${params.search}`)
     },
     storeLogistic(data) {
         return axios.post(`/logistic/store-logistic`, data)

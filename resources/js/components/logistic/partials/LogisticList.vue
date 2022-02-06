@@ -22,18 +22,81 @@
                             </template>
                     </el-table-column>
                     <el-table-column
-                        prop="name"
-                        label="NAME"
+                        prop="bud_injection_x1"
+                        label="BUD INJECTION (X1)"
+                        width="160"
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
-                        prop="daily_rate"
-                        label="Rate per Day"
+                        prop="bu_injection_date"
+                        width="160"
+                        label="BUD INJECTION DATE"
                         :sortable="true">
                     </el-table-column>
                     <el-table-column
-                        prop="description"
-                        label="DESCRIPTION"
+                        prop="bagging_report_x2"
+                        width="170"
+                        label="BAGGING REPORT (X2)"
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="bagging_report_date"
+                        width="170"
+                        label="BAGGING REPORT DATE"
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="stem_cut_y"
+                        label="STEM CUT (Y)"
+                        width="150"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="stem_cut_y_date"
+                        label="STEM CUT DATE"
+                        width="160"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="x1y"
+                        label="(X1)(Y)"
+                        width="150"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="x2y"
+                        label="(X2)(Y)"
+                        width="150"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="x1x2"
+                        label="(X1)(X2)"
+                        width="150"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="x12"
+                        label="(X1)(2)"
+                        width="150"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="x22"
+                        label="(X2)(2)"
+                        show-overflow-tooltip
+                        :sortable="true">
+                    </el-table-column>
+                    <el-table-column
+                        prop="y22"
+                        label="(Y)(2)"
+                        width="150"
                         show-overflow-tooltip
                         :sortable="true">
                     </el-table-column>
