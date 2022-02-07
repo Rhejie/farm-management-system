@@ -67,7 +67,9 @@ class DeployEmployeeController extends Controller
     }
 
     public function getDeployByArea(Request $request) {
+
         $search = $request->search && $request->search != '' && $request->search !== 'null' ? $request->search : null;
+
         $date = $request->date ? $request->date : null;
 
         $params = [

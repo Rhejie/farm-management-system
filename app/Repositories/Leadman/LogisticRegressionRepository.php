@@ -223,64 +223,93 @@ class LogisticRegressionRepository extends Repository {
 
             });
             $new_logs = [];
+
+            $x1 = [];
+            $x2 = [];
+
             foreach ($logs as $key => $value) {
-
-                if(empty($new_logs)) {
-
-                    array_push($new_logs, [
-                        'bud_injection_x1' => $value->bud_injection_x1,
-                        'bud_inject_month' => $value->bud_inject_month,
-                        'bud_inject_year' => $value->bud_inject_year,
-                        'bagging_report_x2' => $value->bagging_report_x2,
-                        'bagging_report_month' => $value->bagging_report_month,
-                        'bagging_report_year' => $value->bagging_report_year,
-                        'y' => $value->y,
-                    ]);
-                }
-
-                else {
-
-                    foreach ($new_logs as $key => $new_value) {
-
-                        if($new_value['bud_inject_month'] === $value['bud_inject_month'] &&
-                            $new_value['bud_inject_year'] === $value['bud_inject_year']) {
-
-                            collect($new_logs)->map(function($log) use ($new_value, $value) {
-
-                                if($log['bud_inject_month'] === $value['bud_inject_month']) {
-
-                                    $log['bud_injection_x1'] += $value['bud_injection_x1'];
-                                    $log['bagging_report_x2'] += $value['bagging_report_x2'];
-
-                                }
-
-                                return $log;
-
-
-                            });
-
-                        }
-
-                        else {
-
-                            array_push($new_logs, [
-                                'bud_injection_x1' => $value->bud_injection_x1,
-                                'bud_inject_month' => $value->bud_inject_month,
-                                'bud_inject_year' => $value->bud_inject_year,
-                                'bagging_report_x2' => $value->bagging_report_x2,
-                                'bagging_report_month' => $value->bagging_report_month,
-                                'bagging_report_year' => $value->bagging_report_year,
-                                'y' => $value->y,
-                            ]);
-
-                        }
-
-                    }
-
-                }
+                array_push($x1, [
+                    'bud_inject_month' => $value['bud_inject_month'],
+                    'bud_injection_x1' => $value['bud_injection_x1']
+                ]);
             }
 
-            return ['new_logs' => $new_logs, 'logs' => $logs];
+            foreach ($logs as $key => $value) {
+                array_push($x2, [
+                    'bagging_report_month' => $value['bagging_report_month'],
+                    'bagging_report_x2' => $value['bagging_report_x2']
+                ]);
+            }
+
+            $x1 = collect($x1)->groupBy('bud_inject_month')
+            ->map(function ($item) {
+                return $item->sum('bud_injection_x1');
+            });
+
+            $x2 = collect($x2)->groupBy('bagging_report_month')
+            ->map(function ($item) {
+                return $item->sum('bagging_report_x2');
+            });
+
+
+            // foreach ($logs as $key => $value) {
+
+            //     if(empty($new_logs)) {
+
+            //         array_push($new_logs, [
+            //             'bud_injection_x1' => $value->bud_injection_x1,
+            //             'bud_inject_month' => $value->bud_inject_month,
+            //             'bud_inject_year' => $value->bud_inject_year,
+            //             'bagging_report_x2' => $value->bagging_report_x2,
+            //             'bagging_report_month' => $value->bagging_report_month,
+            //             'bagging_report_year' => $value->bagging_report_year,
+            //             'y' => $value->y,
+            //         ]);
+            //     }
+
+            //     else {
+
+            //         foreach ($new_logs as $key => $new_value) {
+
+            //             if($new_value['bud_inject_month'] === $value['bud_inject_month'] &&
+            //                 $new_value['bud_inject_year'] === $value['bud_inject_year']) {
+
+            //                 collect($new_logs)->map(function($log) use ($new_value, $value) {
+
+            //                     if($log['bud_inject_month'] === $value['bud_inject_month']) {
+
+            //                         $log['bud_injection_x1'] += $value['bud_injection_x1'];
+            //                         $log['bagging_report_x2'] += $value['bagging_report_x2'];
+
+            //                     }
+
+            //                     return $log;
+
+
+            //                 });
+
+            //             }
+
+            //             else {
+
+            //                 array_push($new_logs, [
+            //                     'bud_injection_x1' => $value->bud_injection_x1,
+            //                     'bud_inject_month' => $value->bud_inject_month,
+            //                     'bud_inject_year' => $value->bud_inject_year,
+            //                     'bagging_report_x2' => $value->bagging_report_x2,
+            //                     'bagging_report_month' => $value->bagging_report_month,
+            //                     'bagging_report_year' => $value->bagging_report_year,
+            //                     'y' => $value->y,
+            //                 ]);
+
+            //             }
+
+            //         }
+
+            //     }
+            // }
+
+            return ['x1' => $x1, 'x2' => $x2, 'logs' => $logs];
         }
 
         return [];
