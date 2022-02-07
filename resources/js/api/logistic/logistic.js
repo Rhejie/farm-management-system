@@ -15,5 +15,8 @@ export default {
     },
     getData(id) {
         return axios.get(`/logistic/get-data/${id}`)
+    },
+    getDataGraph(id) {
+        return axios.get(`/logistic/get-data-graph/${id}`)
     }
 }

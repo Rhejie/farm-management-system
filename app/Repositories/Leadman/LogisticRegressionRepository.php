@@ -226,6 +226,7 @@ class LogisticRegressionRepository extends Repository {
 
             $x1 = [];
             $x2 = [];
+            $y = [];
 
             foreach ($logs as $key => $value) {
                 array_push($x1, [
@@ -241,6 +242,14 @@ class LogisticRegressionRepository extends Repository {
                 ]);
             }
 
+
+            foreach ($logs as $key => $value) {
+                array_push($y, [
+                    'y' => $value['y'],
+                    'bagging_report_month' => $value['bagging_report_month'],
+                ]);
+            }
+
             $x1 = collect($x1)->groupBy('bud_inject_month')
             ->map(function ($item) {
                 return $item->sum('bud_injection_x1');
@@ -251,6 +260,11 @@ class LogisticRegressionRepository extends Repository {
                 return $item->sum('bagging_report_x2');
             });
 
+
+            $y = collect($y)->groupBy('bagging_report_month')
+            ->map(function ($item) {
+                return $item->sum('y');
+            });
 
             // foreach ($logs as $key => $value) {
 
@@ -309,7 +323,7 @@ class LogisticRegressionRepository extends Repository {
             //     }
             // }
 
-            return ['x1' => $x1, 'x2' => $x2, 'logs' => $logs];
+            return ['x1' => $x1, 'x2' => $x2, 'y' => $y, 'logs' => $logs];
         }
 
         return [];
