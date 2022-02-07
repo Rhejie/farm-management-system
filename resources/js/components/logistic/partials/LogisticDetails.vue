@@ -34,7 +34,7 @@
 
                     <el-card class="box-card">
                         <div  class="text item" >
-                            <h3>Expeted</h3>
+                            <h3>Expected</h3>
                             <el-table
                                 :data="dataGraph"
                                 v-loading="loadinglogistics"
