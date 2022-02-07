@@ -6,6 +6,7 @@ use App\Models\Leadman\Harvest;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BananaYieldReportController extends Controller
 {
@@ -19,7 +20,7 @@ class BananaYieldReportController extends Controller
 
         $current_year = Carbon::now()->format('Y');
 
-        $years = Harvest::select(\DB::raw("DATE_FORMAT(date,'%Y') as year"))->groupBy('year')->get()->pluck('year');
+        $years = Harvest::select(DB::raw("DATE_FORMAT(date,'%Y') as year"))->groupBy('year')->get()->pluck('year');
         $sample_data = [];
         $harvest_data = [];
 
@@ -27,9 +28,9 @@ class BananaYieldReportController extends Controller
             foreach($years as $year) {
                 if($year) {
                     if($year != $current_year) {
-                        $harvest = Harvest::select(\DB::raw("DATE_FORMAT(date,'%M') as month"),
-                                            \DB::raw("AVG(stem_cut) as stem_cut"))->where('arae_id', $id)
-                            ->where(\DB::raw("(DATE_FORMAT(date,'%Y'))"), $year)->groupBy('Month')
+                        $harvest = Harvest::select(DB::raw("DATE_FORMAT(date,'%M') as month"),
+                                            DB::raw("AVG(stem_cut) as stem_cut"))->where('arae_id', $id)
+                            ->where(DB::raw("(DATE_FORMAT(date,'%Y'))"), $year)->groupBy('Month')
                             ->get();
 
                         array_push($sample_data, $harvest);

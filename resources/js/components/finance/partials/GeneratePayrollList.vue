@@ -223,6 +223,10 @@ export default {
             this.rate_ot = 0
             this.payroll = data.attendance.map(att => {
                 att.overtime_rate = this.overtime_rate_per_hour.overtime_rate_hour
+                if(att.total_hours < 9) {
+                    let rate = att.rate / 9
+                    att.rate = parseFloat(parseFloat(rate) * parseFloat(att.total_hours)).toFixed(2)
+                }
                 return att
             })
             this.employee = data.employee

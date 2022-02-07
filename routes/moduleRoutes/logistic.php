@@ -12,4 +12,5 @@ Route::prefix('logistic')
         Route::post('/update-logistic/{id}', [App\Http\Controllers\Leadman\LogisticRegresionController::class, 'updateLogistic']);
         Route::post('/delete-logistic/{id}', [App\Http\Controllers\Leadman\LogisticRegresionController::class, 'deleteLogistic']);
         Route::get('/get-data/{id}', [App\Http\Controllers\Leadman\LogisticRegresionController::class, 'getData']);
+        Route::get('/get-data-graph/{id}', [App\Http\Controllers\Leadman\LogisticRegresionController::class, 'getDataGraph']);
     });
