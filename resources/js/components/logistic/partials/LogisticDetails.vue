@@ -40,7 +40,7 @@
                                 v-loading="loadinglogistics"
                                 style="width: 100%">
                                     <el-table-column
-                                        width="70"
+                                        width="70 "
                                         label="No."
                                         :sortable="true">
                                             <template slot-scope="scope">
